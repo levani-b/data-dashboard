@@ -1,0 +1,184 @@
+{
+  "books": [
+    {
+      "title": "The Midnight Library",
+      "author": "Matt Haig",
+      "year": 2020,
+      "genre": "Fiction",
+      "rating": 4.2,
+      "pages": 304,
+      "price": 24.99
+    },
+    {
+      "title": "Dune",
+      "author": "Frank Herbert",
+      "year": 1965,
+      "genre": "Science Fiction",
+      "rating": 4.7,
+      "pages": 412,
+      "price": 18.99
+    },
+    {
+      "title": "Clean Code",
+      "author": "Robert C. Martin",
+      "year": 2008,
+      "genre": "Technical",
+      "rating": 4.8,
+      "pages": 464,
+      "price": 44.99
+    },
+    {
+      "title": "Murder on the Orient Express",
+      "author": "Agatha Christie",
+      "year": 1934,
+      "genre": "Mystery",
+      "rating": 4.6,
+      "pages": 256,
+      "price": 14.99
+    },
+    {
+      "title": "The Psychology of Money",
+      "author": "Morgan Housel",
+      "year": 2020,
+      "genre": "Finance",
+      "rating": 4.7,
+      "pages": 256,
+      "price": 19.99
+    },
+    {
+      "title": "Project Hail Mary",
+      "author": "Andy Weir",
+      "year": 2021,
+      "genre": "Science Fiction",
+      "rating": 4.8,
+      "pages": 496,
+      "price": 28.99
+    },
+    {
+      "title": "The Silent Patient",
+      "author": "Alex Michaelides",
+      "year": 2019,
+      "genre": "Thriller",
+      "rating": 4.5,
+      "pages": 336,
+      "price": 16.99
+    },
+    {
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "year": 2018,
+      "genre": "Self-Help",
+      "rating": 4.9,
+      "pages": 320,
+      "price": 27.99
+    },
+    {
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "year": 1925,
+      "genre": "Classic",
+      "rating": 4.3,
+      "pages": 180,
+      "price": 12.99
+    },
+    {
+      "title": "JavaScript: The Good Parts",
+      "author": "Douglas Crockford",
+      "year": 2008,
+      "genre": "Technical",
+      "rating": 4.6,
+      "pages": 176,
+      "price": 29.99
+    },
+    {
+      "title": "The Thursday Murder Club",
+      "author": "Richard Osman",
+      "year": 2020,
+      "genre": "Mystery",
+      "rating": 4.4,
+      "pages": 382,
+      "price": 15.99
+    },
+    {
+      "title": "Think and Grow Rich",
+      "author": "Napoleon Hill",
+      "year": 1937,
+      "genre": "Finance",
+      "rating": 4.7,
+      "pages": 238,
+      "price": 13.99
+    },
+    {
+      "title": "The Hobbit",
+      "author": "J.R.R. Tolkien",
+      "year": 1937,
+      "genre": "Fantasy",
+      "rating": 4.8,
+      "pages": 310,
+      "price": 17.99
+    },
+    {
+      "title": "The Da Vinci Code",
+      "author": "Dan Brown",
+      "year": 2003,
+      "genre": "Thriller",
+      "rating": 4.1,
+      "pages": 489,
+      "price": 16.99
+    },
+    {
+      "title": "You Don't Know JS",
+      "author": "Kyle Simpson",
+      "year": 2015,
+      "genre": "Technical",
+      "rating": 4.7,
+      "pages": 278,
+      "price": 34.99
+    },
+    {
+      "title": "Pride and Prejudice",
+      "author": "Jane Austen",
+      "year": 1813,
+      "genre": "Classic",
+      "rating": 4.5,
+      "pages": 432,
+      "price": 11.99
+    },
+    {
+      "title": "Deep Work",
+      "author": "Cal Newport",
+      "year": 2016,
+      "genre": "Self-Help",
+      "rating": 4.6,
+      "pages": 296,
+      "price": 26.99
+    },
+    {
+      "title": "Foundation",
+      "author": "Isaac Asimov",
+      "year": 1951,
+      "genre": "Science Fiction",
+      "rating": 4.6,
+      "pages": 244,
+      "price": 15.99
+    },
+    {
+      "title": "Rich Dad Poor Dad",
+      "author": "Robert T. Kiyosaki",
+      "year": 1997,
+      "genre": "Finance",
+      "rating": 4.7,
+      "pages": 336,
+      "price": 17.99
+    },
+    {
+      "title": "The Name of the Wind",
+      "author": "Patrick Rothfuss",
+      "year": 2007,
+      "genre": "Fantasy",
+      "rating": 4.9,
+      "pages": 662,
+      "price": 22.99
+    }
+  ]
+} 
