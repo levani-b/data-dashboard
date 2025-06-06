@@ -44,15 +44,41 @@ function filterBooks(books, searchTerm) {
   });
 }
 
+function filterByGenre(books, genre) {
+  if (genre === 'all') return books;
+  return books.filter(book => book.genre === genre);
+}
+
+function populateGenreDropdown(books) {
+  const genres = [...new Set(books.map(book => book.genre))];
+  const genreSelect = document.getElementById('genreSelect');
+  
+  genres.forEach(genre => {
+    const option = document.createElement('option');
+    option.value = genre;
+    option.textContent = genre;
+    genreSelect.appendChild(option);
+  });
+}
+
 async function main() {
   const books = await fetchBooksData();
   console.log(books);
+  
   displayBooks(books);
+  
+  populateGenreDropdown(books);
   
   const searchInput = document.getElementById('searchInput');
   searchInput.addEventListener('input', (e) => {
     const filtered = filterBooks(books, e.target.value);
     displayBooks(filtered);
+  });
+  
+  const genreSelect = document.getElementById('genreSelect');
+  genreSelect.addEventListener('change', (e) => {
+    const filteredByGenre = filterByGenre(books, e.target.value);
+    displayBooks(filteredByGenre);
   });
 }
 
