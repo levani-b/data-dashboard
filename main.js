@@ -36,10 +36,24 @@ function displayBooks(books) {
   displayArea.appendChild(bookList);
 }
 
+function filterBooks(books, searchTerm) {
+  return books.filter(({ title, author }) => {
+    const searchLower = searchTerm.toLowerCase();
+    return title.toLowerCase().includes(searchLower) || 
+           author.toLowerCase().includes(searchLower);
+  });
+}
+
 async function main() {
   const books = await fetchBooksData();
   console.log(books);
   displayBooks(books);
+  
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', (e) => {
+    const filtered = filterBooks(books, e.target.value);
+    displayBooks(filtered);
+  });
 }
 
 main();
