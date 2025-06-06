@@ -1,8 +1,8 @@
 async function fetchBooksData() {
   try {
     const response = await fetch("data/books.json");
-    const data = await response.json();
-    return data.books;
+    const { books } = await response.json();
+    return books;
   } catch (error) {
     console.error("Error fetching books data:", error);
     return [];
@@ -16,8 +16,7 @@ function displayBooks(books) {
   bookList.style.listStyle = 'none';
   bookList.style.padding = '0';
   
-  
-  for (const book of books) {
+  for (const { title, author, genre, year, rating, price } of books) {
     const listItem = document.createElement('li');
     listItem.style.marginBottom = '10px';
     listItem.style.padding = '10px';
@@ -25,10 +24,10 @@ function displayBooks(books) {
     listItem.style.borderRadius = '4px';
     
     listItem.innerHTML = `
-      <h3>${book.title}</h3>
-      <p>Author: ${book.author}</p>
-      <p>Genre: ${book.genre} | Year: ${book.year}</p>
-      <p>Rating: ${book.rating} | Price: $${book.price}</p
+      <h3>${title}</h3>
+      <p>Author: ${author}</p>
+      <p>Genre: ${genre} | Year: ${year}</p>
+      <p>Rating: ${rating} | Price: $${price}</p>
     `;
     bookList.appendChild(listItem);
   }
