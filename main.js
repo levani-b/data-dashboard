@@ -49,6 +49,23 @@ function filterByGenre(books, genre) {
   return books.filter(book => book.genre === genre);
 }
 
+function sortBooks(books, sortBy) {
+  if (sortBy === 'default') return books;
+  
+  return [...books].sort((a, b) => {
+    switch (sortBy) {
+      case 'title':
+        return a.title.localeCompare(b.title);
+      case 'year':
+        return b.year - a.year;
+      case 'rating':
+        return b.rating - a.rating;
+      default:
+        return 0;
+    }
+  });
+}
+
 function populateGenreDropdown(books) {
   const genres = [...new Set(books.map(book => book.genre))];
   const genreSelect = document.getElementById('genreSelect');
@@ -79,6 +96,12 @@ async function main() {
   genreSelect.addEventListener('change', (e) => {
     const filteredByGenre = filterByGenre(books, e.target.value);
     displayBooks(filteredByGenre);
+  });
+  
+  const sortSelect = document.getElementById('sortSelect');
+  sortSelect.addEventListener('change', (e) => {
+    const sorted = sortBooks(books, e.target.value);
+    displayBooks(sorted);
   });
 }
 
