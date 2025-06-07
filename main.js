@@ -499,9 +499,7 @@ function validateData(books) {
 
   const someExpensiveBooks = books.some((book) => book.price > 30);
 
-  const validationTitle = document.createElement("h4");
-  validationTitle.textContent = "Data Validation:";
-  totalSales.appendChild(validationTitle);
+
 
   const results = [
     { label: "All books complete", status: allBooksComplete },

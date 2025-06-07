@@ -79,10 +79,19 @@ header h1 {
 
 .display-section {
     background: white;
-    padding: 20px;
+    padding: 25px;
     border-radius: 8px;
     margin-bottom: 15px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.section-title {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 8px;
 }
 
 .data-vizualization ul {
@@ -113,7 +122,7 @@ header h1 {
 
 .top-statistics {
     background: white;
-    padding: 15px;
+    padding: 25px;
     border-radius: 8px;
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -170,7 +179,7 @@ header h1 {
 
 .validation-section {
     background: white;
-    padding: 10px 15px;
+    padding: 25px;
     border-radius: 8px;
     margin-bottom: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -389,4 +398,46 @@ header h1 {
     .bar-label {
         font-size: 12px;
     }
+}
+
+.footer {
+    margin-top: 40px;
+    padding: 20px 0;
+}
+
+.footer-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3498db, transparent);
+    margin-bottom: 15px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.footer-link {
+    color: #2c3e50;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer-link:hover {
+    color: #3498db;
+    transform: translateY(-2px);
+}
+
+.github-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.footer-text {
+    font-weight: 600;
+    font-size: 16px;
 }
