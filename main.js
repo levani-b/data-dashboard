@@ -199,6 +199,182 @@ function findHighestLowestRated(books) {
   booksCentury.appendChild(highestSection);
   booksCentury.appendChild(lowestSection);
 }
+
+function createBookSummaries(books) {
+  return books.map(({ title, author, rating, price, genre, year }) => ({
+    title,
+    author,
+    rating,
+    price,
+    genre,
+    year,
+    summary: `${title} by ${author} (${year})`,
+    priceCategory: price > 25 ? 'Premium' : price > 15 ? 'Standard' : 'Budget',
+    ratingCategory: rating >= 4.5 ? 'Excellent' : rating >= 4.0 ? 'Good' : rating >= 3.5 ? 'Average' : 'Below Average',
+    ageCategory: year >= 2010 ? 'Recent' : year >= 1990 ? 'Modern' : 'Classic'
+  }));
+}
+
+function createGenreSummaries(books) {
+  const genreGroups = books.reduce((acc, book) => {
+    if (!acc[book.genre]) {
+      acc[book.genre] = [];
+    }
+    acc[book.genre].push(book);
+    return acc;
+  }, {});
+
+  return Object.entries(genreGroups).map(([genre, genreBooks]) => {
+    const totalBooks = genreBooks.length;
+    const averageRating = genreBooks.reduce((sum, book) => sum + book.rating, 0) / totalBooks;
+    const averagePrice = genreBooks.reduce((sum, book) => sum + book.price, 0) / totalBooks;
+    const totalValue = genreBooks.reduce((sum, book) => sum + book.price, 0);
+    
+    return {
+      genre,
+      totalBooks,
+      averageRating: parseFloat(averageRating.toFixed(2)),
+      averagePrice: parseFloat(averagePrice.toFixed(2)),
+      totalValue: parseFloat(totalValue.toFixed(2)),
+      topRatedBook: genreBooks.reduce((max, book) => book.rating > max.rating ? book : max),
+      priceRange: {
+        min: Math.min(...genreBooks.map(book => book.price)),
+        max: Math.max(...genreBooks.map(book => book.price))
+      }
+    };
+  });
+}
+
+function createPriceAnalysis(books) {
+  const priceRanges = [
+    { label: 'Budget (Under $15)', min: 0, max: 15 },
+    { label: 'Standard ($15-$25)', min: 15, max: 25 },
+    { label: 'Premium ($25-$35)', min: 25, max: 35 },
+    { label: 'Luxury (Over $35)', min: 35, max: Infinity }
+  ];
+
+  return priceRanges.map(({ label, min, max }) => {
+    const booksInRange = books.filter(book => book.price >= min && book.price < max);
+    const averageRating = booksInRange.length > 0 
+      ? booksInRange.reduce((sum, book) => sum + book.rating, 0) / booksInRange.length 
+      : 0;
+    
+    return {
+      category: label,
+      count: booksInRange.length,
+      percentage: parseFloat(((booksInRange.length / books.length) * 100).toFixed(1)),
+      averageRating: parseFloat(averageRating.toFixed(2)),
+      books: booksInRange.map(book => ({ title: book.title, price: book.price, rating: book.rating }))
+    };
+  });
+}
+
+function displaySummaryCards(books) {
+  const summaryContainer = document.querySelector('.summary-cards');
+  summaryContainer.innerHTML = '';
+
+  const bookSummaries = createBookSummaries(books);
+  const genreSummaries = createGenreSummaries(books);
+  const priceAnalysis = createPriceAnalysis(books);
+
+  const cardsContainer = document.createElement('div');
+  cardsContainer.className = 'cards-container';
+
+
+  const genreCard = document.createElement('div');
+  genreCard.className = 'summary-card genre-card';
+  
+  const genreTitle = document.createElement('h3');
+  genreTitle.className = 'card-title';
+  genreTitle.textContent = 'Genre Analysis';
+  genreCard.appendChild(genreTitle);
+
+  genreSummaries.forEach(({ genre, totalBooks, averageRating, averagePrice, topRatedBook }) => {
+    const genreDiv = document.createElement('div');
+    genreDiv.className = 'card-item';
+    genreDiv.innerHTML = `
+      <strong>${genre}</strong><br>
+      Books: ${totalBooks} | Avg Rating: ${averageRating} | Avg Price: $${averagePrice}<br>
+      <em>Top: ${topRatedBook.title} (${topRatedBook.rating}★)</em>
+    `;
+    genreCard.appendChild(genreDiv);
+  });
+
+
+  const priceCard = document.createElement('div');
+  priceCard.className = 'summary-card price-card';
+  
+  const priceTitle = document.createElement('h3');
+  priceTitle.className = 'card-title';
+  priceTitle.textContent = 'Price Distribution';
+  priceCard.appendChild(priceTitle);
+
+  priceAnalysis.forEach(({ category, count, percentage, averageRating }) => {
+    const priceDiv = document.createElement('div');
+    priceDiv.className = 'card-item';
+    priceDiv.innerHTML = `
+      <strong>${category}</strong><br>
+      ${count} books (${percentage}%) | Avg Rating: ${averageRating}★
+    `;
+    priceCard.appendChild(priceDiv);
+  });
+
+
+  const categoriesCard = document.createElement('div');
+  categoriesCard.className = 'summary-card categories-card';
+  
+  const categoriesTitle = document.createElement('h3');
+  categoriesTitle.className = 'card-title';
+  categoriesTitle.textContent = 'Book Categories';
+  categoriesCard.appendChild(categoriesTitle);
+
+  const ratingCategories = ['Excellent', 'Good', 'Average', 'Below Average'];
+
+  ratingCategories.forEach(category => {
+    const categoryBooks = bookSummaries.filter(book => book.ratingCategory === category);
+    if (categoryBooks.length > 0) {
+      const categoryDiv = document.createElement('div');
+      categoryDiv.className = 'card-item';
+      categoryDiv.innerHTML = `<strong>${category} Books:</strong> ${categoryBooks.length}`;
+      categoriesCard.appendChild(categoryDiv);
+    }
+  });
+
+  const statsCard = document.createElement('div');
+  statsCard.className = 'summary-card stats-card';
+  
+  const statsTitle = document.createElement('h3');
+  statsTitle.className = 'card-title';
+  statsTitle.textContent = 'Quick Stats';
+  statsCard.appendChild(statsTitle);
+
+  const totalValue = books.reduce((sum, book) => sum + book.price, 0);
+  const averagePages = books.reduce((sum, book) => sum + book.pages, 0) / books.length;
+  const recentBooks = bookSummaries.filter(book => book.ageCategory === 'Recent').length;
+  const excellentBooks = bookSummaries.filter(book => book.ratingCategory === 'Excellent').length;
+
+  const quickStats = [
+    `Total Collection Value: $${totalValue.toFixed(2)}`,
+    `Average Pages: ${Math.round(averagePages)}`,
+    `Recent Books (2010+): ${recentBooks}`,
+    `Excellent Rated (4.5+): ${excellentBooks}`
+  ];
+
+  quickStats.forEach(stat => {
+    const statDiv = document.createElement('div');
+    statDiv.className = 'card-item';
+    statDiv.textContent = stat;
+    statsCard.appendChild(statDiv);
+  });
+
+  cardsContainer.appendChild(genreCard);
+  cardsContainer.appendChild(priceCard);
+  cardsContainer.appendChild(categoriesCard);
+  cardsContainer.appendChild(statsCard);
+
+  summaryContainer.appendChild(cardsContainer);
+}
+
 function validateData(books) {
   const totalSales = document.querySelector(".total-sales");
   totalSales.innerHTML = "";
@@ -264,6 +440,7 @@ async function main() {
   const books = await fetchBooksData();
 
   displayBooks(books);
+  displaySummaryCards(books);
   populateGenreDropdown(books);
   calculateStatistics(books);
   calculateGenreDistribution(books);
@@ -274,6 +451,7 @@ async function main() {
   searchInput.addEventListener("input", (e) => {
     const filtered = filterBooks(books, e.target.value);
     displayBooks(filtered);
+    displaySummaryCards(filtered);
     calculateStatistics(filtered);
   });
 
@@ -281,6 +459,7 @@ async function main() {
   genreSelect.addEventListener("change", (e) => {
     const filteredByGenre = filterByGenre(books, e.target.value);
     displayBooks(filteredByGenre);
+    displaySummaryCards(filteredByGenre);
     calculateStatistics(filteredByGenre);
     findHighestLowestRated(filteredByGenre);
   });
@@ -289,6 +468,7 @@ async function main() {
   sortSelect.addEventListener("change", (e) => {
     const sorted = sortBooks(books, e.target.value);
     displayBooks(sorted);
+    displaySummaryCards(sorted);
   });
 }
 
