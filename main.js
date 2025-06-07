@@ -199,6 +199,66 @@ function findHighestLowestRated(books) {
   booksCentury.appendChild(highestSection);
   booksCentury.appendChild(lowestSection);
 }
+function validateData(books) {
+  const totalSales = document.querySelector(".total-sales");
+  totalSales.innerHTML = "";
+
+  const allBooksComplete = books.every(
+    (book) =>
+      book.title &&
+      book.author &&
+      book.genre &&
+      book.year &&
+      book.rating !== undefined &&
+      book.price !== undefined &&
+      book.pages !== undefined
+  );
+
+  const allRatingsValid = books.every(
+    (book) => book.rating >= 0 && book.rating <= 5
+  );
+
+  const allYearsValid = books.every(
+    (book) => book.year >= 1000 && book.year <= new Date().getFullYear()
+  );
+
+  const someBooksMissingData = books.some(
+    (book) =>
+      !book.title ||
+      !book.author ||
+      !book.genre ||
+      !book.year ||
+      book.rating === undefined ||
+      book.price === undefined ||
+      book.pages === undefined
+  );
+
+  const someInvalidRatings = books.some(
+    (book) => book.rating < 0 || book.rating > 5
+  );
+
+  const someExpensiveBooks = books.some((book) => book.price > 30);
+
+  const validationTitle = document.createElement("h4");
+  validationTitle.textContent = "Data Validation:";
+  totalSales.appendChild(validationTitle);
+
+  const results = [
+    { label: "All books complete", status: allBooksComplete },
+    { label: "All ratings valid", status: allRatingsValid },
+    { label: "All years valid", status: allYearsValid },
+    { label: "Some missing data", status: someBooksMissingData },
+    { label: "Some invalid ratings", status: someInvalidRatings },
+    { label: "Some expensive books", status: someExpensiveBooks },
+  ];
+
+  results.forEach((result) => {
+    const resultDiv = document.createElement("div");
+    resultDiv.textContent = `${result.label}: ${result.status ? "✓" : "✗"}`;
+    resultDiv.style.color = result.status ? "green" : "red";
+    totalSales.appendChild(resultDiv);
+  });
+}
 
 async function main() {
   const books = await fetchBooksData();
@@ -208,6 +268,7 @@ async function main() {
   calculateStatistics(books);
   calculateGenreDistribution(books);
   findHighestLowestRated(books);
+  validateData(books);
 
   const searchInput = document.getElementById("search-input");
   searchInput.addEventListener("input", (e) => {
