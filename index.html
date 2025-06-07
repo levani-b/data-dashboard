@@ -8,10 +8,10 @@
   </head>
   <body>
     <main>
+      <header>
+        <h1>Data Dashboard</h1>
+      </header>
       <section class="search-section">
-        <header>
-          <h1>Data Dashboard</h1>
-        </header>
         <div>
           <div class="search">
             <input
@@ -33,24 +33,32 @@
           </div>
         </div>
       </section>
-      <section class="summary-section">
-        <div class="summary-cards"></div>
-      </section>
       <section class="display-section">
         <div class="data-vizualization"></div>
       </section>
-      <section class="statistics-section">
-        <div class="basic-statistics">
+      
+      <section class="top-statistics">
+        <div class="basic-stats-grid">
           <div class="average-rating"></div>
           <div class="average-pages"></div>
           <div class="total-books"></div>
         </div>
-        <div class="advanced-statistics">
-          <div class="books-genre"></div>
-          <div class="book-ratings"></div>
+        <div class="rating-stats">
+          <div class="highest-rated"></div>
+          <div class="lowest-rated"></div>
         </div>
+      </section>
 
+      <section class="validation-section">
         <div class="total-sales"></div>
+      </section>
+
+      <section class="summary-section">
+        <div class="summary-cards"></div>
+      </section>
+
+      <section class="charts-section">
+        <div class="books-genre"></div>
       </section>
     </main>
     <script src="main.js"></script>

@@ -108,8 +108,27 @@ function calculateStatistics(books) {
 }
 
 function calculateGenreDistribution(books) {
-  const genreDistribution = document.querySelector(".books-genre");
-  genreDistribution.innerHTML = "";
+  const chartsSection = document.querySelector(".charts-section");
+  chartsSection.innerHTML = "";
+
+  const chartsHeader = document.createElement("h2");
+  chartsHeader.textContent = "Data Visualization Charts";
+  chartsHeader.className = "charts-header";
+  chartsSection.appendChild(chartsHeader);
+
+  const chartsContainer = document.createElement("div");
+  chartsContainer.className = "charts-container";
+
+  const genreChartContainer = document.createElement("div");
+  genreChartContainer.className = "chart-container";
+  
+  const genreTitle = document.createElement("h3");
+  genreTitle.textContent = "Books by Genre Distribution";
+  genreTitle.className = "chart-title";
+  genreChartContainer.appendChild(genreTitle);
+
+  const genreDistribution = document.createElement("div");
+  genreDistribution.className = "genre-chart";
 
   const genreCounts = books.reduce((acc, book) => {
     if (acc[book.genre]) {
@@ -124,45 +143,109 @@ function calculateGenreDistribution(books) {
     ([, a], [, b]) => b - a
   );
 
+  const maxCount = Math.max(...Object.values(genreCounts));
+
   sortedGenres.forEach(([genre, count]) => {
     const barContainer = document.createElement("div");
-    barContainer.style.position = "relative";
-    barContainer.style.marginBottom = "5px";
+    barContainer.className = "bar-container";
+
+    const barLabel = document.createElement("div");
+    barLabel.className = "bar-label";
+    barLabel.textContent = genre;
+
+    const barWrapper = document.createElement("div");
+    barWrapper.className = "bar-wrapper";
 
     const chart = document.createElement("div");
-    chart.style.width = `${count * 20}px`;
-    chart.style.height = "20px";
-    chart.style.backgroundColor = "#3498db";
-    chart.style.cursor = "pointer";
+    chart.className = "bar";
+    const percentage = (count / maxCount) * 100;
+    chart.style.width = `${Math.max(percentage, 10)}%`;
+    chart.setAttribute("data-count", count);
 
-    const info = document.createElement("div");
-    info.style.position = "absolute";
-    info.style.left = "0";
-    info.style.top = "0";
-    info.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-    info.style.color = "white";
-    info.style.padding = "2px 5px";
-    info.style.display = "none";
-    info.textContent = `${genre}: ${count} books`;
+    const barValue = document.createElement("span");
+    barValue.className = "bar-value";
+    barValue.textContent = `${count} books`;
 
-    barContainer.appendChild(chart);
-    barContainer.appendChild(info);
-
-    barContainer.addEventListener("mouseenter", () => {
-      info.style.display = "block";
-    });
-
-    barContainer.addEventListener("mouseleave", () => {
-      info.style.display = "none";
-    });
+    barWrapper.appendChild(chart);
+    barWrapper.appendChild(barValue);
+    
+    barContainer.appendChild(barLabel);
+    barContainer.appendChild(barWrapper);
 
     genreDistribution.appendChild(barContainer);
   });
+
+  genreChartContainer.appendChild(genreDistribution);
+
+  const ratingChartContainer = document.createElement("div");
+  ratingChartContainer.className = "chart-container";
+  
+  const ratingTitle = document.createElement("h3");
+  ratingTitle.textContent = "Books by Rating Distribution";
+  ratingTitle.className = "chart-title";
+  ratingChartContainer.appendChild(ratingTitle);
+
+  const ratingDistribution = document.createElement("div");
+  ratingDistribution.className = "rating-chart";
+
+  const ratingRanges = [
+    { label: "4.5+ Stars", min: 4.5, max: 5 },
+    { label: "4.0-4.4 Stars", min: 4.0, max: 4.4 },
+    { label: "3.5-3.9 Stars", min: 3.5, max: 3.9 },
+    { label: "3.0-3.4 Stars", min: 3.0, max: 3.4 },
+    { label: "Below 3.0", min: 0, max: 2.9 }
+  ];
+
+  const ratingCounts = ratingRanges.map(range => {
+    const count = books.filter(book => book.rating >= range.min && book.rating <= range.max).length;
+    return { ...range, count };
+  });
+
+  const maxRatingCount = Math.max(...ratingCounts.map(r => r.count));
+
+  ratingCounts.forEach(({ label, count }) => {
+    const barContainer = document.createElement("div");
+    barContainer.className = "bar-container";
+
+    const barLabel = document.createElement("div");
+    barLabel.className = "bar-label";
+    barLabel.textContent = label;
+
+    const barWrapper = document.createElement("div");
+    barWrapper.className = "bar-wrapper";
+
+    const chart = document.createElement("div");
+    chart.className = "bar rating-bar";
+    const percentage = maxRatingCount > 0 ? (count / maxRatingCount) * 100 : 0;
+    chart.style.width = `${Math.max(percentage, 5)}%`;
+    chart.setAttribute("data-count", count);
+
+    const barValue = document.createElement("span");
+    barValue.className = "bar-value";
+    barValue.textContent = `${count} books`;
+
+    barWrapper.appendChild(chart);
+    barWrapper.appendChild(barValue);
+    
+    barContainer.appendChild(barLabel);
+    barContainer.appendChild(barWrapper);
+
+    ratingDistribution.appendChild(barContainer);
+  });
+
+  ratingChartContainer.appendChild(ratingDistribution);
+
+  chartsContainer.appendChild(genreChartContainer);
+  chartsContainer.appendChild(ratingChartContainer);
+  chartsSection.appendChild(chartsContainer);
 }
 
 function findHighestLowestRated(books) {
-  const booksCentury = document.querySelector(".book-ratings");
-  booksCentury.innerHTML = "";
+  const highestContainer = document.querySelector(".highest-rated");
+  const lowestContainer = document.querySelector(".lowest-rated");
+  
+  highestContainer.innerHTML = "";
+  lowestContainer.innerHTML = "";
 
   const sortedByRating = [...books].sort((a, b) => b.rating - a.rating);
 
@@ -174,30 +257,25 @@ function findHighestLowestRated(books) {
   const lowestRating = sortedByRating[sortedByRating.length - 1].rating;
   const lowestRatedBooks = books.filter((book) => book.rating === lowestRating);
 
-  const highestSection = document.createElement("div");
   const highestTitle = document.createElement("h4");
   highestTitle.textContent = `Highest Rated (${highestRating}):`;
-  highestSection.appendChild(highestTitle);
+  highestContainer.appendChild(highestTitle);
 
   highestRatedBooks.forEach((book) => {
     const bookDiv = document.createElement("div");
     bookDiv.textContent = `${book.title} by ${book.author}`;
-    highestSection.appendChild(bookDiv);
+    highestContainer.appendChild(bookDiv);
   });
 
-  const lowestSection = document.createElement("div");
   const lowestTitle = document.createElement("h4");
   lowestTitle.textContent = `Lowest Rated (${lowestRating}):`;
-  lowestSection.appendChild(lowestTitle);
+  lowestContainer.appendChild(lowestTitle);
 
   lowestRatedBooks.forEach((book) => {
     const bookDiv = document.createElement("div");
     bookDiv.textContent = `${book.title} by ${book.author}`;
-    lowestSection.appendChild(bookDiv);
+    lowestContainer.appendChild(bookDiv);
   });
-
-  booksCentury.appendChild(highestSection);
-  booksCentury.appendChild(lowestSection);
 }
 
 function createBookSummaries(books) {
@@ -277,10 +355,9 @@ function displaySummaryCards(books) {
   const genreSummaries = createGenreSummaries(books);
   const priceAnalysis = createPriceAnalysis(books);
 
-  const cardsContainer = document.createElement('div');
-  cardsContainer.className = 'cards-container';
-
-
+  const genreContainer = document.createElement('div');
+  genreContainer.className = 'genre-container';
+  
   const genreCard = document.createElement('div');
   genreCard.className = 'summary-card genre-card';
   
@@ -288,6 +365,9 @@ function displaySummaryCards(books) {
   genreTitle.className = 'card-title';
   genreTitle.textContent = 'Genre Analysis';
   genreCard.appendChild(genreTitle);
+
+  const genreGrid = document.createElement('div');
+  genreGrid.className = 'genre-grid';
 
   genreSummaries.forEach(({ genre, totalBooks, averageRating, averagePrice, topRatedBook }) => {
     const genreDiv = document.createElement('div');
@@ -297,9 +377,14 @@ function displaySummaryCards(books) {
       Books: ${totalBooks} | Avg Rating: ${averageRating} | Avg Price: $${averagePrice}<br>
       <em>Top: ${topRatedBook.title} (${topRatedBook.rating}★)</em>
     `;
-    genreCard.appendChild(genreDiv);
+    genreGrid.appendChild(genreDiv);
   });
 
+  genreCard.appendChild(genreGrid);
+  genreContainer.appendChild(genreCard);
+
+  const threeCardsContainer = document.createElement('div');
+  threeCardsContainer.className = 'three-cards-container';
 
   const priceCard = document.createElement('div');
   priceCard.className = 'summary-card price-card';
@@ -318,7 +403,6 @@ function displaySummaryCards(books) {
     `;
     priceCard.appendChild(priceDiv);
   });
-
 
   const categoriesCard = document.createElement('div');
   categoriesCard.className = 'summary-card categories-card';
@@ -367,12 +451,12 @@ function displaySummaryCards(books) {
     statsCard.appendChild(statDiv);
   });
 
-  cardsContainer.appendChild(genreCard);
-  cardsContainer.appendChild(priceCard);
-  cardsContainer.appendChild(categoriesCard);
-  cardsContainer.appendChild(statsCard);
+  threeCardsContainer.appendChild(priceCard);
+  threeCardsContainer.appendChild(categoriesCard);
+  threeCardsContainer.appendChild(statsCard);
 
-  summaryContainer.appendChild(cardsContainer);
+  summaryContainer.appendChild(genreContainer);
+  summaryContainer.appendChild(threeCardsContainer);
 }
 
 function validateData(books) {
@@ -440,28 +524,31 @@ async function main() {
   const books = await fetchBooksData();
 
   displayBooks(books);
-  displaySummaryCards(books);
   populateGenreDropdown(books);
   calculateStatistics(books);
-  calculateGenreDistribution(books);
   findHighestLowestRated(books);
   validateData(books);
+  displaySummaryCards(books);
+  calculateGenreDistribution(books);
 
   const searchInput = document.getElementById("search-input");
   searchInput.addEventListener("input", (e) => {
     const filtered = filterBooks(books, e.target.value);
     displayBooks(filtered);
-    displaySummaryCards(filtered);
     calculateStatistics(filtered);
+    findHighestLowestRated(filtered);
+    displaySummaryCards(filtered);
+    calculateGenreDistribution(filtered);
   });
 
   const genreSelect = document.getElementById("genre-select");
   genreSelect.addEventListener("change", (e) => {
     const filteredByGenre = filterByGenre(books, e.target.value);
     displayBooks(filteredByGenre);
-    displaySummaryCards(filteredByGenre);
     calculateStatistics(filteredByGenre);
     findHighestLowestRated(filteredByGenre);
+    displaySummaryCards(filteredByGenre);
+    calculateGenreDistribution(filteredByGenre);
   });
 
   const sortSelect = document.getElementById("sort-select");
@@ -469,6 +556,7 @@ async function main() {
     const sorted = sortBooks(books, e.target.value);
     displayBooks(sorted);
     displaySummaryCards(sorted);
+    calculateGenreDistribution(sorted);
   });
 }
 
