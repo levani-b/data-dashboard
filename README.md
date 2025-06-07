@@ -1,4 +1,6 @@
-# [Data Dashboard](https://data-dashboard-levanib.vercel.app/)
+# Data Dashboard
+
+🔗 [Live Demo](https://data-dashboard-levanib.vercel.app/)
 
 A comprehensive book collection dashboard that visualizes library data through interactive charts, statistics, and filtering capabilities. Built with vanilla JavaScript showcasing advanced array methods and modern web development techniques.
 
@@ -24,24 +26,13 @@ A comprehensive book collection dashboard that visualizes library data through i
 
 ## Features
 
-- **Interactive Book Grid**: Responsive card-based book display with clean layout
-- **Advanced Search & Filtering**: Real-time search by title/author with genre filtering using `filter()` method
-- **Multiple Sorting Options**: Sort by title, year, rating, or default order using custom `sort()` comparators
-- **Comprehensive Statistics**: 
-  - Basic stats (total books, average rating, average pages) calculated with `reduce()`
-  - Highest and lowest rated books display using sorting algorithms
-  - Data validation with `every()` and `some()` methods for quality assurance
-- **Data Analysis Cards**:
-  - Genre analysis with statistics per category using `map()` and `reduce()`
-  - Price distribution across different ranges with percentage calculations
-  - Book categorization by rating quality using `filter()` and `map()`
-  - Quick collection insights with transformed data views
-- **Interactive Charts**:
-  - Books by Genre Distribution (horizontal bar chart with gradient effects)
-  - Books by Rating Distribution (quality spread visualization)
-  - Dynamic bar sizing based on data proportions
-  - Hover effects and smooth animations
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices using CSS Grid
-- **Real-time Updates**: All visualizations update dynamically with filtering and searching
-- **Modern UI**: Clean, professional interface with proper visual hierarchy and spacing
-- **Data Transformation**: Multiple data views created using `map()` for enhanced user insights
+- Interactive book grid with responsive card-based layout
+- Advanced search and filtering by title/author with genre options
+- Multiple sorting options (title, year, rating, default order)
+- Comprehensive statistics including average rating and total pages
+- Genre analysis with category breakdowns
+- Price distribution visualization
+- Books by rating and genre distribution charts
+- Real-time updates with filtering and searching
+- Responsive design for all devices
+- Modern UI with smooth animations and hover effects
