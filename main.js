@@ -83,9 +83,11 @@ function populateGenreDropdown(books) {
 function calculateStatistics(books) {
   const totalBooks = document.querySelector(".total-books");
   const averageRating = document.querySelector(".average-rating");
+  const averagePagesCont = document.querySelector(".average-pages");
 
   totalBooks.innerHTML = "";
   averageRating.innerHTML = "";
+  averagePagesCont.innerHTML = "";
 
   const totalItems = books.length;
   const total = document.createElement("p");
@@ -97,17 +99,115 @@ function calculateStatistics(books) {
   const average = document.createElement("p");
   average.textContent = `Average Rating: ${averageRate.toFixed(2)}`;
   averageRating.appendChild(average);
+
+  const bookPages = books.map((book) => book.pages);
+  const averagePages = bookPages.reduce((a, b) => a + b, 0) / totalItems;
+  const averagePagesText = document.createElement("p");
+  averagePagesText.textContent = `Average Pages: ${averagePages.toFixed(0)}`;
+  averagePagesCont.appendChild(averagePagesText);
+}
+
+function calculateGenreDistribution(books) {
+  const genreDistribution = document.querySelector(".books-genre");
+  genreDistribution.innerHTML = "";
+
+  const genreCounts = books.reduce((acc, book) => {
+    if (acc[book.genre]) {
+      acc[book.genre] += 1;
+    } else {
+      acc[book.genre] = 1;
+    }
+    return acc;
+  }, {});
+
+  const sortedGenres = Object.entries(genreCounts).sort(
+    ([, a], [, b]) => b - a
+  );
+
+  sortedGenres.forEach(([genre, count]) => {
+    const barContainer = document.createElement("div");
+    barContainer.style.position = "relative";
+    barContainer.style.marginBottom = "5px";
+
+    const chart = document.createElement("div");
+    chart.style.width = `${count * 20}px`;
+    chart.style.height = "20px";
+    chart.style.backgroundColor = "#3498db";
+    chart.style.cursor = "pointer";
+
+    const info = document.createElement("div");
+    info.style.position = "absolute";
+    info.style.left = "0";
+    info.style.top = "0";
+    info.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+    info.style.color = "white";
+    info.style.padding = "2px 5px";
+    info.style.display = "none";
+    info.textContent = `${genre}: ${count} books`;
+
+    barContainer.appendChild(chart);
+    barContainer.appendChild(info);
+
+    barContainer.addEventListener("mouseenter", () => {
+      info.style.display = "block";
+    });
+
+    barContainer.addEventListener("mouseleave", () => {
+      info.style.display = "none";
+    });
+
+    genreDistribution.appendChild(barContainer);
+  });
+}
+
+function findHighestLowestRated(books) {
+  const booksCentury = document.querySelector(".book-ratings");
+  booksCentury.innerHTML = "";
+
+  const sortedByRating = [...books].sort((a, b) => b.rating - a.rating);
+
+  const highestRating = sortedByRating[0].rating;
+  const highestRatedBooks = books.filter(
+    (book) => book.rating === highestRating
+  );
+
+  const lowestRating = sortedByRating[sortedByRating.length - 1].rating;
+  const lowestRatedBooks = books.filter((book) => book.rating === lowestRating);
+
+  const highestSection = document.createElement("div");
+  const highestTitle = document.createElement("h4");
+  highestTitle.textContent = `Highest Rated (${highestRating}):`;
+  highestSection.appendChild(highestTitle);
+
+  highestRatedBooks.forEach((book) => {
+    const bookDiv = document.createElement("div");
+    bookDiv.textContent = `${book.title} by ${book.author}`;
+    highestSection.appendChild(bookDiv);
+  });
+
+  const lowestSection = document.createElement("div");
+  const lowestTitle = document.createElement("h4");
+  lowestTitle.textContent = `Lowest Rated (${lowestRating}):`;
+  lowestSection.appendChild(lowestTitle);
+
+  lowestRatedBooks.forEach((book) => {
+    const bookDiv = document.createElement("div");
+    bookDiv.textContent = `${book.title} by ${book.author}`;
+    lowestSection.appendChild(bookDiv);
+  });
+
+  booksCentury.appendChild(highestSection);
+  booksCentury.appendChild(lowestSection);
 }
 
 async function main() {
   const books = await fetchBooksData();
-  console.log(books);
 
   displayBooks(books);
-
   populateGenreDropdown(books);
-
   calculateStatistics(books);
+  calculateGenreDistribution(books);
+  findHighestLowestRated(books);
 
   const searchInput = document.getElementById("search-input");
   searchInput.addEventListener("input", (e) => {
@@ -121,6 +221,7 @@ async function main() {
     const filteredByGenre = filterByGenre(books, e.target.value);
     displayBooks(filteredByGenre);
     calculateStatistics(filteredByGenre);
+    findHighestLowestRated(filteredByGenre);
   });
 
   const sortSelect = document.getElementById("sort-select");
